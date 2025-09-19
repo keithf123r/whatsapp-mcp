@@ -1040,12 +1040,11 @@ func handleHistorySync(client *whatsmeow.Client, messageStore *MessageStore, his
 			}
 
 			// Get timestamp from message info
-			var timestamp time.Time
-			if ts := latestMsg.Message.GetMessageTimestamp(); ts != 0 {
-				timestamp = time.Unix(int64(ts), 0)
-			} else {
+			ts := latestMsg.Message.GetMessageTimestamp()
+			if ts == 0 {
 				continue
 			}
+			timestamp := time.Unix(int64(ts), 0)
 
 			messageStore.StoreChat(chatJID, name, timestamp)
 
@@ -1107,12 +1106,11 @@ func handleHistorySync(client *whatsmeow.Client, messageStore *MessageStore, his
 				}
 
 				// Get message timestamp
-				var timestamp time.Time
-				if ts := msg.Message.GetMessageTimestamp(); ts != 0 {
-					timestamp = time.Unix(int64(ts), 0)
-				} else {
+				ts := msg.Message.GetMessageTimestamp()
+				if ts == 0 {
 					continue
 				}
+				timestamp := time.Unix(int64(ts), 0)
 
 				err = messageStore.StoreMessage(
 					msgID,
